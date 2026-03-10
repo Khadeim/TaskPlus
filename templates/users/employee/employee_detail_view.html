@@ -1,0 +1,52 @@
+{% extends 'partials/base.html' %}
+<!-- load -->
+{% load static crispy_forms_tags %} {% block contents %}
+<div class="row">
+    <div class="col-12">
+        <div class="card overflow-hidden">
+            <div class="bg-primary bg-soft">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">Welcome Back !</h5>
+                            <p>TASK PLUS Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end">
+                        <img src="assets/images/profile-img.png" alt="" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h5 class="font-size-15 text-truncate mt-4">@{{user.username}}</h5>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="pt-4">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h5 class="font-size-15">{{projects|length}}</h5>
+                                    <p class="text-muted mb-0">Projects</p>
+                                </div>
+                                <div class="col-3">
+                                    <h5 class="font-size-15">{{teams|length}}</h5>
+                                    <p class="text-muted mb-0">Teams</p>
+                                </div>
+                                <div class="col-3">
+                                    <h5 class="font-size-15">{{companies|length}}</h5>
+                                    <p class="text-muted mb-0">Companies</p>
+                                </div>
+                                <div class="col-3">
+                                    <a href="{% url 'users:user_update_view' %}" class="btn btn-primary">Update Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contents %}

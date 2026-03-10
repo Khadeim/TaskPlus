@@ -1,0 +1,12 @@
+{% load crispy_forms_tags %}
+
+<form action="" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title add-task-title">Add New Task</h5>
+    </div>
+    <div class="modal-body">{% csrf_token %} {{form|crispy}}</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>

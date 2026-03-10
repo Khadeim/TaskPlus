@@ -1,0 +1,24 @@
+{% extends 'partials/base.html' %}
+<!-- load -->
+{% load static crispy_forms_tags %}
+<!-- block -->
+{% block contents %}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">{{heading}}</h4>
+				<p class="card-title-desc">Are you sure, you wanna delete?</p>
+
+				<form method="post">
+					{% csrf_token %} {{ form|crispy }}
+					<a href="{% url 'invoice_list_view' %}" class="btn btn-danger">Cancel</a>
+					<input type="submit" value="Save" class="btn btn-success" />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end row -->
+
+{% endblock %}

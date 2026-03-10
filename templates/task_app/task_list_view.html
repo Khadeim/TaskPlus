@@ -1,0 +1,100 @@
+{% extends 'partials/base.html' %} {% load static %} {% block extra_css %}
+<!-- dragula css -->
+<link href="{% static 'libs/dragula/dist/dragula.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %} {% block contents %}
+<div class="row">
+    <div class="col-12 d-flex justify-content-end mb-3">
+        <button id="create-task" class="btn btn-primary" type="button" name="button">Add Task</button>
+    </div>
+
+    {% for task in object_list %}
+    <div class="col-lg-4">
+        <div id="task-{{forloop.count}}">
+            <div id="upcoming-task" class="pb-1 task-list">
+                <div class="card task-box" id="uptask-{{forloop.count}}">
+                    <div class="card-body">
+                        <div class="dropdown float-end">
+                            <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <button class="update-task dropdown-item edittask-details" data-form-url="{% url 'update_task_modal_view' task.pk %}">Edit</button>
+                                <button class="delete-task dropdown-item deletetask" data-form-url="{% url 'delete_task_modal_view' task.pk %}">Delete</button>
+                            </div>
+                        </div>
+                        <!-- end dropdown -->
+                        <div class="float-end ms-2">
+                            {% if task.task_done %}
+                            <span class="badge rounded-pill badge-soft-success font-size-12" id="task-status">Completed</span>
+                            {% else %}
+                            <span class="badge rounded-pill badge-soft-secondary font-size-12" id="task-status">Waiting</span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark" id="task-name">{{task.task_name}}</a></h5>
+                            <p class="text-muted mb-4">{{task.date_created|date}}</p>
+                        </div>
+                        <div>
+                            <p>{{task.task_information}}</p>
+                        </div>
+                        <div class="avatar-group float-start task-assigne">
+                            <div class="avatar-group-item">
+                                <a href="javascript: void(0);" class="d-inline-block">
+                                    <div class="avatar-xs">
+                                        <span class="avatar-title rounded-circle bg-info text-white font-size-16"> {{user.username.0|title}} </span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <h5 class="font-size-15 mb-1" id="task-budget">{{task.task_reason}}</h5>
+                            <p class="mb-0 text-muted">{{task.task_goal}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="lead">No tasks available</p>
+    {% endfor %}
+</div>
+<!-- end row -->
+
+<div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<!-- Modal 2 with id="modal" -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<!-- /.modal -->
+{% endblock %} {% block extra_javascript %}
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // update task
+        $(".update-task").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url")})
+        })
+
+        // Create task button opens form in modal with id="create-modal"
+        $("#create-task").modalForm({
+            formURL: "{% url 'create_task_modal_view' %}",
+            modalID: "#create-modal",
+        })
+        // delete task
+        $(".delete-task").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true})
+        })
+    })
+</script>
+{% endblock %}

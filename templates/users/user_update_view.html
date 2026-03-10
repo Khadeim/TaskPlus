@@ -1,0 +1,55 @@
+{% extends 'partials/base.html' %} {% load static crispy_forms_tags %} {% block contents %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <h4 class="card-title">Update Profile</h4>
+                    <p class="card-title-desc">Required fields are marked with *</p>
+                    {{ form|crispy }}
+                    <div class="d-flex flex-wrap gap-2 justify-content-end">
+                        <a class="btn btn-light" href="{% url 'homepage_view' %}">Back</a>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Tasks</h4>
+                <div class="table-responsive">
+                    <table class="table table-nowrap align-middle mb-0">
+                        <tbody>
+                            {% for task in request.user.tasks.all %}
+                            <tr>
+                                <td>
+                                    <h5 class="text-truncate font-size-14 m-0"><a href="javascript: void(0);" class="text-dark">{{task.task_name}}</a></h5>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        {% if task.task_done %}
+                                        <span class="badge rounded-pill badge-soft-success font-size-11">Completed</span>
+                                        {% else %}
+                                        <span class="badge rounded-pill badge-soft-secondary font-size-11">Waiting</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <p>No task found!</p>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+{% endblock %}

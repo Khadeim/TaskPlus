@@ -1,0 +1,95 @@
+{% extends 'partials/base.html' %} {% load static %} {% block contents %} {% with request.user.is_superuser as superuser %}
+<div class="row">
+    {% if superuser %}
+    <div class="col-12 d-flex justify-content-end mb-3">
+        <button id="create-goal" class="btn btn-primary" type="button" name="button">Add Goal</button>
+    </div>
+    {% endif %} {% for goal in object_list %}
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">{{goal.name}}</h4>
+                <div id="task-{{forloop.count}}">
+                    <div id="upcoming-task" class="pb-1 task-list">
+                        {% for task in goal.tasks.all %}
+                        <div class="card task-box border border-primary" id="uptask-{{forloop.count}}">
+                            <div class="card-body">
+                                <div class="float-end ms-2">
+                                    {% if task.task_done %}
+                                    <span class="badge rounded-pill badge-soft-success font-size-12" id="task-status">Completed</span>
+                                    {% else %}
+                                    <span class="badge rounded-pill badge-soft-secondary font-size-12" id="task-status">Waiting</span>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark" id="task-name">{{task.task_name}}</a></h5>
+                                    <p class="text-muted mb-4">{{task.date_created|date}}</p>
+                                </div>
+                                <div>
+                                    <p>{{task.task_information}}</p>
+                                </div>
+                                <div class="avatar-group float-start task-assigne">
+                                    <div class="avatar-group-item">
+                                        <a href="javascript: void(0);" class="d-inline-block">
+                                            <div class="avatar-xs">
+                                                <span class="avatar-title rounded-circle bg-info text-white font-size-16"> {{user.username.0|title}} </span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <h5 class="font-size-15 mb-1" id="task-budget">{{task.task_reason}}</h5>
+                                    <p class="mb-0 text-muted">{{task.task_goal}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="lead">No Task Found!</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="lead">No Goal Found!</p>
+    {% endfor %}
+
+    <!-- end col -->
+</div>
+
+<div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<!-- Modal 2 with id="modal" -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+{% endwith %} {% endblock %} {% if request.user.is_superuser %} {% block extra_javascript %}
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // update goal
+        $(".update-goal").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url")})
+        })
+
+        // Create goal button opens form in modal with id="create-modal"
+        $("#create-goal").modalForm({
+            formURL: "{% url 'create_goal_modal_view' %}",
+            modalID: "#create-modal",
+        })
+        // delete goal
+        $(".delete-goal").each(function () {
+            $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true})
+        })
+    })
+</script>
+{% endblock %} {% endif %}

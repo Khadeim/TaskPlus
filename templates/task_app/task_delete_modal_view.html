@@ -1,0 +1,16 @@
+<form method="post" action="">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title add-task-title">Delete Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">{% for error in form.non_field_errors %} {{ error }} {% endfor %}</div>
+        <p>Are you sure you want to delete the task?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+</form>
